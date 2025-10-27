@@ -1,2 +1,2 @@
-hostname {{ hostname.split('.')[0] | default('root-device') }}
+hostname {{ task.host.name | default('root-device') }}
 
