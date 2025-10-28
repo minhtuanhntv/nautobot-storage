@@ -7,6 +7,7 @@ platform qfp utilization monitor load 80
 platform punt-keepalive disable-kernel-core
 platform console serial
 !
+{% set hostname = host.name | default('root-device') %}
 {% include './ios/hostname.j2' %}
 !
 boot-start-marker
