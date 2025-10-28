@@ -3,6 +3,16 @@
 
 {# === SNMP Communities === #}
 {% set communities = snmp.get("community", []) %}
+{% set location = snmp.get("location") %}
+{% set contact = snmp.get("contact") %}
+{% set hosts = snmp.get("host", []) %}
+
+{# Chỉ in block nếu có ít nhất 1 thành phần SNMP #}
+{% if communities or location or contact or hosts %}
+!
+{% endif %}
+
+{# SNMP Communities #}
 {% if communities is iterable and communities is not string %}
   {% for community in communities %}
     {% if community.name is defined and community.role is defined %}
@@ -11,24 +21,26 @@ snmp-server community {{ community.name }} {{ community.role }}
   {% endfor %}
 {% endif %}
 
-{# === SNMP Location === #}
-{% set location = snmp.get("location") %}
+{# SNMP Location #}
 {% if location %}
 snmp-server location {{ location }}
 {% endif %}
 
-{# === SNMP Contact === #}
-{% set contact = snmp.get("contact") %}
+{# SNMP Contact #}
 {% if contact %}
 snmp-server contact {{ contact }}
 {% endif %}
 
-{# === SNMP Hosts (Trap Receivers) === #}
-{% set hosts = snmp.get("host", []) %}
+{# SNMP Hosts (Trap Receivers) #}
 {% if hosts is iterable and hosts is not string %}
   {% for host in hosts %}
     {% if host.ip is defined and host.version is defined and host.community is defined %}
 snmp-server host {{ host.ip }} version {{ host.version }} {{ host.community }}
     {% endif %}
   {% endfor %}
+{% endif %}
+
+{# Đóng block SNMP nếu có nội dung #}
+{% if communities or location or contact or hosts %}
+!
 {% endif %}
