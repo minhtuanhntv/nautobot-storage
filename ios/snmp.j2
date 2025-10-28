@@ -1,42 +1,34 @@
-{# === SNMP Configuration for Cisco IOS === #}
+{# === SNMP Configuration for Cisco IOS (NO ! blocks) === #}
 {% set snmp = config_context.get("snmp", {}) %}
 {% set communities = snmp.get("community", []) %}
 {% set location = snmp.get("location") %}
 {% set contact = snmp.get("contact") %}
 {% set hosts = snmp.get("host", []) %}
 
-{% set snmp_config = [] %}
-
-{%- if communities or location or contact or hosts %}
-{% set _ = snmp_config.append('!') %}
-{%- endif %}
+{% set snmp_lines = [] %}
 
 {%- if communities is iterable and communities is not string %}
   {%- for community in communities %}
     {%- if community.name is defined and community.role is defined %}
-{% set _ = snmp_config.append('snmp-server community ' ~ community.name ~ ' ' ~ community.role) %}
+{% set _ = snmp_lines.append('snmp-server community ' ~ community.name ~ ' ' ~ community.role) %}
     {%- endif %}
   {%- endfor %}
 {%- endif %}
 
 {%- if location %}
-{% set _ = snmp_config.append('snmp-server location ' ~ location) %}
+{% set _ = snmp_lines.append('snmp-server location ' ~ location) %}
 {%- endif %}
 
 {%- if contact %}
-{% set _ = snmp_config.append('snmp-server contact ' ~ contact) %}
+{% set _ = snmp_lines.append('snmp-server contact ' ~ contact) %}
 {%- endif %}
 
 {%- if hosts is iterable and hosts is not string %}
   {%- for host in hosts %}
     {%- if host.ip is defined and host.version is defined and host.community is defined %}
-{% set _ = snmp_config.append('snmp-server host ' ~ host.ip ~ ' version ' ~ host.version ~ ' ' ~ host.community) %}
+{% set _ = snmp_lines.append('snmp-server host ' ~ host.ip ~ ' version ' ~ host.version ~ ' ' ~ host.community) %}
     {%- endif %}
   {%- endfor %}
 {%- endif %}
 
-{%- if communities or location or contact or hosts %}
-{% set _ = snmp_config.append('!') %}
-{%- endif %}
-
-{{ snmp_config | join('\n') }}
+{{ snmp_lines | join('\n') }}
