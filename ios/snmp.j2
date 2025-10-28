@@ -1,9 +1,34 @@
-{% for community in config_context["snmp"]["community"] %}
-snmp-server community {{ community["name"] }} {{ community["role"] }}
-{% endfor %}
-snmp-server location {{ config_context["snmp"]["location"] }}
-snmp-server contact {{ config_context["snmp"]["contact"] }}
-{% for host in config_context["snmp"]["host"] %}
-snmp-server host {{ host["ip"] }} version {{ host["version"] }} {{ host["community"] }} 
-{% endfor %}
+{# === SNMP Configuration for Cisco IOS === #}
+{% set snmp = config_context.get("snmp", {}) %}
 
+{# === SNMP Communities === #}
+{% set communities = snmp.get("community", []) %}
+{% if communities is iterable and communities is not string %}
+  {% for community in communities %}
+    {% if community.name is defined and community.role is defined %}
+snmp-server community {{ community.name }} {{ community.role }}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{# === SNMP Location === #}
+{% set location = snmp.get("location") %}
+{% if location %}
+snmp-server location {{ location }}
+{% endif %}
+
+{# === SNMP Contact === #}
+{% set contact = snmp.get("contact") %}
+{% if contact %}
+snmp-server contact {{ contact }}
+{% endif %}
+
+{# === SNMP Hosts (Trap Receivers) === #}
+{% set hosts = snmp.get("host", []) %}
+{% if hosts is iterable and hosts is not string %}
+  {% for host in hosts %}
+    {% if host.ip is defined and host.version is defined and host.community is defined %}
+snmp-server host {{ host.ip }} version {{ host.version }} {{ host.community }}
+    {% endif %}
+  {% endfor %}
+{% endif %}
