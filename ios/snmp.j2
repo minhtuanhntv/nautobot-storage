@@ -1,46 +1,39 @@
 {# === SNMP Configuration for Cisco IOS === #}
 {% set snmp = config_context.get("snmp", {}) %}
 
-{# === SNMP Communities === #}
 {% set communities = snmp.get("community", []) %}
 {% set location = snmp.get("location") %}
 {% set contact = snmp.get("contact") %}
 {% set hosts = snmp.get("host", []) %}
 
-{# Chỉ in block nếu có ít nhất 1 thành phần SNMP #}
-{% if communities or location or contact or hosts %}
+{%- if communities or location or contact or hosts -%}
 !
-{% endif %}
+{%- endif -%}
 
-{# SNMP Communities #}
-{% if communities is iterable and communities is not string %}
-  {% for community in communities %}
-    {% if community.name is defined and community.role is defined %}
+{%- if communities is iterable and communities is not string -%}
+  {%- for community in communities -%}
+    {%- if community.name is defined and community.role is defined -%}
 snmp-server community {{ community.name }} {{ community.role }}
-    {% endif %}
-  {% endfor %}
-{% endif %}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
 
-{# SNMP Location #}
-{% if location %}
+{%- if location -%}
 snmp-server location {{ location }}
-{% endif %}
+{%- endif -%}
 
-{# SNMP Contact #}
-{% if contact %}
+{%- if contact -%}
 snmp-server contact {{ contact }}
-{% endif %}
+{%- endif -%}
 
-{# SNMP Hosts (Trap Receivers) #}
-{% if hosts is iterable and hosts is not string %}
-  {% for host in hosts %}
-    {% if host.ip is defined and host.version is defined and host.community is defined %}
+{%- if hosts is iterable and hosts is not string -%}
+  {%- for host in hosts -%}
+    {%- if host.ip is defined and host.version is defined and host.community is defined -%}
 snmp-server host {{ host.ip }} version {{ host.version }} {{ host.community }}
-    {% endif %}
-  {% endfor %}
-{% endif %}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
 
-{# Đóng block SNMP nếu có nội dung #}
-{% if communities or location or contact or hosts %}
+{%- if communities or location or contact or hosts -%}
 !
-{% endif %}
+{%- endif -%}
