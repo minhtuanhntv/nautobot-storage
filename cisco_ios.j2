@@ -26,6 +26,7 @@ vrf definition MANAGEMENT
 !
 logging userinfo
 !
+{% set aaa_new_model = config_context.get("aaa-new-model", true) | default(true) %}
 {% if config_context["aaa-new-model"] == false %}
 no aaa new-model
 {% else %}
