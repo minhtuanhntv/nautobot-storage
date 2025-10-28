@@ -6,31 +6,31 @@
 {% set hosts = snmp.get("host", []) %}
 
 {%- if communities or location or contact or hosts %}
-!
+!\n
 {%- endif %}
 
 {%- if communities is iterable and communities is not string %}
-  {%- for community in communities %}
-    {%- if community.name is defined and community.role is defined %}
-snmp-server community {{ community.name }} {{ community.role }}
-    {%- endif %}
-  {%- endfor %}
+{%- for community in communities %}
+{%- if community.name is defined and community.role is defined %}
+snmp-server community {{ community.name }} {{ community.role }}\n
+{%- endif %}
+{%- endfor %}
 {%- endif %}
 
 {%- if location %}
-snmp-server location {{ location }}
+snmp-server location {{ location }}\n
 {%- endif %}
 
 {%- if contact %}
-snmp-server contact {{ contact }}
+snmp-server contact {{ contact }}\n
 {%- endif %}
 
 {%- if hosts is iterable and hosts is not string %}
-  {%- for host in hosts %}
-    {%- if host.ip is defined and host.version is defined and host.community is defined %}
-snmp-server host {{ host.ip }} version {{ host.version }} {{ host.community }}
-    {%- endif %}
-  {%- endfor %}
+{%- for host in hosts %}
+{%- if host.ip is defined and host.version is defined and host.community is defined %}
+snmp-server host {{ host.ip }} version {{ host.version }} {{ host.community }}\n
+{%- endif %}
+{%- endfor %}
 {%- endif %}
 
 {%- if communities or location or contact or hosts %}
