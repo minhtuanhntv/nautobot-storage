@@ -5,38 +5,38 @@
 {% set contact = snmp.get("contact") %}
 {% set hosts = snmp.get("host", []) %}
 
-{% set snmp_lines = [] %}
+{% set snmp_config = [] %}
 
-{%- if communities or location or contact or hosts -%}
-{% do snmp_lines.append('!') %}
-{%- endif -%}
+{%- if communities or location or contact or hosts %}
+{% set _ = snmp_config.append('!') %}
+{%- endif %}
 
-{%- if communities is iterable and communities is not string -%}
-  {%- for community in communities -%}
-    {%- if community.name is defined and community.role is defined -%}
-{% do snmp_lines.append('snmp-server community ' ~ community.name ~ ' ' ~ community.role) %}
-    {%- endif -%}
-  {%- endfor -%}
-{%- endif -%}
+{%- if communities is iterable and communities is not string %}
+  {%- for community in communities %}
+    {%- if community.name is defined and community.role is defined %}
+{% set _ = snmp_config.append('snmp-server community ' ~ community.name ~ ' ' ~ community.role) %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
 
-{%- if location -%}
-{% do snmp_lines.append('snmp-server location ' ~ location) %}
-{%- endif -%}
+{%- if location %}
+{% set _ = snmp_config.append('snmp-server location ' ~ location) %}
+{%- endif %}
 
-{%- if contact -%}
-{% do snmp_lines.append('snmp-server contact ' ~ contact) %}
-{%- endif -%}
+{%- if contact %}
+{% set _ = snmp_config.append('snmp-server contact ' ~ contact) %}
+{%- endif %}
 
-{%- if hosts is iterable and hosts is not string -%}
-  {%- for host in hosts -%}
-    {%- if host.ip is defined and host.version is defined and host.community is defined -%}
-{% do snmp_lines.append('snmp-server host ' ~ host.ip ~ ' version ' ~ host.version ~ ' ' ~ host.community) %}
-    {%- endif -%}
-  {%- endfor -%}
-{%- endif -%}
+{%- if hosts is iterable and hosts is not string %}
+  {%- for host in hosts %}
+    {%- if host.ip is defined and host.version is defined and host.community is defined %}
+{% set _ = snmp_config.append('snmp-server host ' ~ host.ip ~ ' version ' ~ host.version ~ ' ' ~ host.community) %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
 
-{%- if communities or location or contact or hosts -%}
-{% do snmp_lines.append('!') %}
-{%- endif -%}
+{%- if communities or location or contact or hosts %}
+{% set _ = snmp_config.append('!') %}
+{%- endif %}
 
-{{ snmp_lines | join('\n') }}
+{{ snmp_config | join('\n') }}
