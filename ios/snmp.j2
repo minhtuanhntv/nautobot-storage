@@ -31,4 +31,4 @@
   {%- endfor %}
 {%- endif %}
 
-{% { snmp_lines | join('\n') } %}
+{{ snmp_lines | join('\n') }}{% if snmp_lines %}\n{% endif %}
