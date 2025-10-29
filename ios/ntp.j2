@@ -1,22 +1,8 @@
-{# === NTP Configuration for Cisco IOS (NO ! blocks) === #}
 {% set ntp_data = config_context.get("ntp", []) %}
-
-{% set ntp_lines = [] %}
-
-{%- for server in ntp_data %}
-  {%- if server is mapping %}
-    {%- set ip = server.get("ip") %}
-    {%- set prefer = server.get("prefer", false) %}
-    {%- if ip %}
-      {%- if prefer %}
-{% set _ = ntp_lines.append('ntp server ' ~ ip ~ ' prefer') %}
-      {%- else %}
-{% set _ = ntp_lines.append('ntp server ' ~ ip) %}
-      {%- endif %}
-    {%- endif %}
-  {%- elif server is string and server.strip() %}
-{% set _ = ntp_lines.append('ntp server ' ~ server) %}
-  {%- endif %}
-{%- endfor %}
-
-{{ ntp_lines | join('\n') }}
+{% for server in ntp_data %}
+{% if server['prefer'] %}
+ntp server {{ server['ip'] }} prefer
+{% else %}
+ntp server {{ server['ip'] }}
+{% endif %}
+{% endfor %}
