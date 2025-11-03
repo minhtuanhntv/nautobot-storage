@@ -27,15 +27,15 @@ jobs:
           CONTAINER_NAME="batfish"
 
           # Kiểm tra container có tồn tại không
-          CONTAINER_ID=$(docker ps -q -f name="^${CONTAINER_NAME}$")
+          #CONTAINER_ID=$(docker ps -q -f name="^${CONTAINER_NAME}$")
 
-          if [ -n "${CONTAINER_ID}" ]; then
+          #if [ -n "${CONTAINER_ID}" ]; then
             echo "Container ${CONTAINER_NAME} (${CONTAINER_ID}) found, copying..." >> /home/lancs/log.txt
             #docker exec "${CONTAINER_ID}" mkdir -p "${DEST_DIR}"
             docker cp "${SRC_DIR}/." "${CONTAINER_ID}:${DEST_DIR}/"
             echo "Listing copied files:" >> /home/lancs/log.txt
             docker exec "${CONTAINER_ID}" ls -l "${DEST_DIR}" >> /home/lancs/log.txt
             echo "Copy completed successfully." >> /home/lancs/log.txt
-          else
-            echo "Container ${CONTAINER_NAME} not found! Skipping copy." >> /home/lancs/log.txt
-          fi
+            #else
+            #echo "Container ${CONTAINER_NAME} not found! Skipping copy." >> /home/lancs/log.txt
+            #fi
