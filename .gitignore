@@ -1,10 +1,12 @@
 # Bỏ qua tất cả cache của Python
 __pycache__/
+pycache/
 *.py[cod]
 *$py.class
 
 # Bỏ qua thư mục pycache trong jobs (đã có sẵn, nhưng để rõ ràng)
 jobs/__pycache__/
+jobs/pycache/
 
 # Bỏ qua các file môi trường ảo và logs (tuỳ chọn, nếu có thể xuất hiện trong repo của bạn)
 .env
