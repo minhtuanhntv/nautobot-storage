@@ -18,6 +18,13 @@ jobs:
           echo "Updating configs in Batfish volume" > /home/lancs/log.txt
           echo "Configs updated" >> /home/lancs/log.txt
 
+      - name: Debug info
+        if: always()
+        run: |
+          echo "Runner user: $(whoami)" >> /home/lancs/log.txt
+          echo "Docker containers:" >> /home/lancs/log.txt
+          docker ps >> /home/lancs/log.txt
+
       - name: Copy gns3-backup into Batfish container
         run: |
           echo "Copying gns3-backup folder into Batfish container..." >> /home/lancs/log.txt
