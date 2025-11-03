@@ -27,7 +27,7 @@ jobs:
           CONTAINER_NAME="batfish"
 
           # Lấy container ID thật
-          #CONTAINER_ID=$(docker ps -q -f name="^${CONTAINER_NAME}$")
+          CONTAINER_ID=$(docker ps -q -f name="^${CONTAINER_NAME}$")
 
           #if [ -n "${CONTAINER_ID}" ]; then
             echo "Container ${CONTAINER_NAME} (${CONTAINER_ID}) found, copying..." >> /home/lancs/log.txt
