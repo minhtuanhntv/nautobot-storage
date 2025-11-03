@@ -1,0 +1,21 @@
+name: Update Batfish Configs
+
+on:
+  push:
+    branches:
+      - user-guide  # Trigger khi push đến user-guide
+
+jobs:
+  update_configs:
+    runs-on: [self-hosted, batfish]  # Chạy trên runner của bạn (dùng label)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  # Pull configs mới từ GitHub
+
+      - name: Update Batfish volume
+        run: |
+          echo "Updating configs in Batfish volume"
+          #sudo mkdir -p /path/to/batfish-volume  # Thay bằng Mountpoint thực (ví dụ: /var/lib/docker/volumes/batfish-data/_data)
+          #sudo rsync -av --delete ${{ github.workspace }}/ /path/to/batfish-volume/  # Copy toàn bộ repo (hoặc chỉ nautobot-storage/: ${{ github.workspace }}/nautobot-storage/ ) vào volume
+          echo "Configs updated"
