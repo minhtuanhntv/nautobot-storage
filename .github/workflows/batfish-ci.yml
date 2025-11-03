@@ -23,7 +23,7 @@ jobs:
           echo "Copying gns3-backup folder into Batfish container..." >> /home/lancs/log.txt
           
           SRC_DIR="/home/lancs/actions-runner/_work/nautobot-storage/nautobot-storage/gns3-backup"
-          DEST_DIR="/data/gns3-backup"
+          DEST_DIR="/notebooks"
           CONTAINER_NAME="batfish"
 
           # Kiểm tra container có tồn tại không
@@ -31,7 +31,7 @@ jobs:
 
           if [ -n "${CONTAINER_ID}" ]; then
             echo "Container ${CONTAINER_NAME} (${CONTAINER_ID}) found, copying..." >> /home/lancs/log.txt
-            docker exec "${CONTAINER_ID}" mkdir -p "${DEST_DIR}"
+            #docker exec "${CONTAINER_ID}" mkdir -p "${DEST_DIR}"
             docker cp "${SRC_DIR}/." "${CONTAINER_ID}:${DEST_DIR}/"
             echo "Listing copied files:" >> /home/lancs/log.txt
             docker exec "${CONTAINER_ID}" ls -l "${DEST_DIR}" >> /home/lancs/log.txt
