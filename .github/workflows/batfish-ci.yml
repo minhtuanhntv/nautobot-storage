@@ -20,24 +20,22 @@ jobs:
 
       - name: Copy gns3-backup into Batfish container
         run: |
-          echo "Copying gns3-backup folder into Batfish container..." > /home/lancs/log.txt
+          echo "Copying gns3-backup folder into Batfish container..." >> /home/lancs/log.txt
           
-          # Đường dẫn làm việc của runner (nơi code được checkout)
           SRC_DIR="/home/lancs/actions-runner/_work/nautobot-storage/nautobot-storage/gns3-backup"
-          
-          # Đường dẫn đích trong container Batfish
           DEST_DIR="/data/gns3-backup"
-          
-          # Tên container (hoặc ID)
-          CONTAINER="batfish"
+          CONTAINER_NAME="batfish"
 
-          # Đảm bảo container tồn tại
-          if docker ps --format '{{.Names}}' | grep -q "^${CONTAINER}$"; then
-            echo "Container ${CONTAINER} found, copying..." >> /home/lancs/log.txt
-            sudo docker exec "${CONTAINER}" mkdir -p "${DEST_DIR}"
-            sudo docker cp "${SRC_DIR}/." "${CONTAINER}:${DEST_DIR}/"
+          # Kiểm tra container có tồn tại không
+          CONTAINER_ID=$(docker ps -q -f name="^${CONTAINER_NAME}$")
+
+          if [ -n "${CONTAINER_ID}" ]; then
+            echo "Container ${CONTAINER_NAME} (${CONTAINER_ID}) found, copying..." >> /home/lancs/log.txt
+            docker exec "${CONTAINER_ID}" mkdir -p "${DEST_DIR}"
+            docker cp "${SRC_DIR}/." "${CONTAINER_ID}:${DEST_DIR}/"
+            echo "Listing copied files:" >> /home/lancs/log.txt
+            docker exec "${CONTAINER_ID}" ls -l "${DEST_DIR}" >> /home/lancs/log.txt
             echo "Copy completed successfully." >> /home/lancs/log.txt
           else
-            echo "Container ${CONTAINER} not found! Skipping copy." >> /home/lancs/log.txt
+            echo "Container ${CONTAINER_NAME} not found! Skipping copy." >> /home/lancs/log.txt
           fi
-
