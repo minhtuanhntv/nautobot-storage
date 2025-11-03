@@ -7,7 +7,7 @@ on:
 
 jobs:
   update_configs:
-    runs-on: [self-hosted, batfish]  # Chạy trên runner của bạn (dùng label)
+    runs-on: [self-hosted, k8s-master-1]  # Chạy trên runner của bạn (dùng label)
 
     steps:
       - name: Checkout code
@@ -15,7 +15,7 @@ jobs:
 
       - name: Update Batfish volume
         run: |
-          echo "Updating configs in Batfish volume"
+          echo "Updating configs in Batfish volume" > /home/lancs/log.txt
           #sudo mkdir -p /path/to/batfish-volume  # Thay bằng Mountpoint thực (ví dụ: /var/lib/docker/volumes/batfish-data/_data)
           #sudo rsync -av --delete ${{ github.workspace }}/ /path/to/batfish-volume/  # Copy toàn bộ repo (hoặc chỉ nautobot-storage/: ${{ github.workspace }}/nautobot-storage/ ) vào volume
-          echo "Configs updated"
+          echo "Configs updated" >> /home/lancs/log.txt
