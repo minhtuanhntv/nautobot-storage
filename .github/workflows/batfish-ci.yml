@@ -36,7 +36,7 @@ jobs:
           # Lấy container ID thật
           CONTAINER_ID=$(docker ps -q -f name="^${CONTAINER_NAME}$")
 
-          #if [ -n "${CONTAINER_ID}" ]; then
+          if [ -n "${CONTAINER_ID}" ]; then
             echo "Container ${CONTAINER_NAME} (${CONTAINER_ID}) found, copying..." >> /home/lancs/log.txt
 
             docker exec "${CONTAINER_ID}" mkdir -p "${DEST_DIR}"
@@ -46,6 +46,6 @@ jobs:
             docker exec "${CONTAINER_ID}" ls -l "${DEST_DIR}" >> /home/lancs/log.txt
 
             echo "Copy completed successfully." >> /home/lancs/log.txt
-            #else
-            #echo "Container ${CONTAINER_NAME} not found! Skipping copy." >> /home/lancs/log.txt
-            #fi
+          else
+            echo "Container ${CONTAINER_NAME} not found! Skipping copy." >> /home/lancs/log.txt
+          fi
