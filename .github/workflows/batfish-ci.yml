@@ -39,8 +39,8 @@ jobs:
           if [ -n "${CONTAINER_ID}" ]; then
             echo "Container ${CONTAINER_NAME} (${CONTAINER_ID}) found, copying..." >> /home/lancs/log.txt
 
-            docker exec "${CONTAINER_ID}" mkdir -p "${DEST_DIR}/backup-config"
-            docker cp "${SRC_DIR}/." "${CONTAINER_ID}:${DEST_DIR}/backup-config/"
+            docker exec "${CONTAINER_ID}" mkdir -p "${DEST_DIR}/backup-config/configs"
+            docker cp "${SRC_DIR}/." "${CONTAINER_ID}:${DEST_DIR}/backup-config/configs/"
 
             echo "Listing copied files:" >> /home/lancs/log.txt
             docker exec "${CONTAINER_ID}" ls -l "${DEST_DIR}" >> /home/lancs/log.txt
